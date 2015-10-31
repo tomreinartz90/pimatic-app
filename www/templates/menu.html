@@ -1,4 +1,4 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="false" ng-controller="DevicesCtrl">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-stable">
       <ion-nav-back-button>
@@ -14,22 +14,22 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
+      <h1 class="title">pages</h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ng-click="login()">
-          Login
+        <ion-item menu-close ng-repeat="page in data.pages" href="#/app/devices:{{page.id}}">
+          {{page.name}}
         </ion-item>
-        <ion-item menu-close href="#/app/search">
-          Search
-        </ion-item>
-        <ion-item menu-close href="#/app/browse">
-          Browse
-        </ion-item>
-        <ion-item menu-close href="#/app/playlists">
-          Playlists
-        </ion-item>
+        <!--<ion-item menu-close href="#/app/search">-->
+          <!--Search-->
+        <!--</ion-item>-->
+        <!--<ion-item menu-close href="#/app/browse">-->
+          <!--Browse-->
+        <!--</ion-item>-->
+        <!--<ion-item menu-close href="#/app/playlists">-->
+          <!--Playlists-->
+        <!--</ion-item>-->
       </ion-list>
     </ion-content>
   </ion-side-menu>

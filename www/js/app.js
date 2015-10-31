@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ngResource'])
 
-.run(function($ionicPlatform) {
+  .run(function($ionicPlatform, pimaticApi) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,10 +19,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngResource'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    pimaticApi.startSocket();
+
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider, $resourceProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $resourceProvider) {
   $stateProvider
 
     .state('app', {
@@ -32,7 +34,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngResource'])
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
+    .state('app.search', {
     url: '/search',
     views: {
       'menuContent': {
@@ -41,25 +43,25 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngResource'])
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/browse.html'
-        }
+    .state('app.browse', {
+    url: '/browse',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/browse.html'
       }
-    })
+    }
+  })
     .state('app.devices', {
-      url: '/devices',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/devices.html',
-          controller: 'DevicesCtrl'
-        }
+    url: '/devices:pageId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/devices.html',
+        controller: 'DevicesCtrl'
       }
-    })
+    }
+  })
 
-  .state('app.single', {
+    .state('app.single', {
     url: '/playlists/:playlistId',
     views: {
       'menuContent': {

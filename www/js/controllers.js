@@ -10,7 +10,7 @@ app.controller('AppCtrl', function($scope, $ionicModal, $timeout, pimaticApi) {
   //});
 
   // Form data for the login modal
-  $scope.loginData = {};
+  //$scope.loginData = {};
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -41,25 +41,76 @@ app.controller('AppCtrl', function($scope, $ionicModal, $timeout, pimaticApi) {
   };
 });
 
+app.controller('DevicesCtrl', function($scope, $rootScope, pimaticApi, $stateParams) {
+  $scope.data  = {};
+  $scope.page = "";
 
-
-app.controller('DevicesCtrl', function($scope, $rootScope, pimaticApi) {
-  $scope.playlists = {};
-
-
-  $rootScope.$on('data-updated', function(event, data){
-    $scope.name = 'Joe';
-    $scope.devices = data.devices;
+  $rootScope.$on('data-updated', function(){
+    if(pimaticApi.data !== undefined)
+      $scope.data.pages = pimaticApi.data.pages;
+    setDevices();
   });
 
-  $scope.toggleSwitch = function (device) { 
-    console.log(device);
-    //device is on
-    if(device.attributes[0].value == true)
-      pimaticApi.updateDevice(device.id, "turnOff");
-    else 
-      pimaticApi.updateDevice(device.id, "turnOn");
+  $scope.$on('$locationChangeSuccess', function(event) {
+    setDevices();
+  })
 
+
+  //console.log($stateParams);
+
+
+  setDevices = function() {
+    var pageId = $stateParams.pageId;
+    pageId = pageId.substring(1);
+    //var devicesList = [];
+    var devices = [];
+
+    //if there is no page defined show all devices.
+    if(pageId == ""){
+      $scope.data.devices = pimaticApi.data.devices;
+      return;
+    }
+    //find selected page
+    angular.forEach(pimaticApi.data.pages, function(page, pageKey){
+      devicesList = [];
+      if(page.id == pageId){
+        //console.log(page);
+        $scope.page = page.name;
+        setDevicesInPage(page.devices);
+      }
+    });
+
+    setDevicesInPage = function (devicesList) {
+      //devicesList = page.devices;
+      devices = [];
+      angular.forEach(pimaticApi.data.devices, function(device){
+        angular.forEach(devicesList, function(deviceId){
+          if(device.id == deviceId.deviceId){
+            devices.push(device);
+          }
+        });
+      });
+      //$scope.$apply();
+      $scope.$evalAsync(
+        function( $scope ) {
+          $scope.data.devices = devices;
+        }
+      );
+    };
+
+  };
+
+
+  $scope.toggleSwitch = function (device) {
+    //    console.log(device);
+    //device is on
+    if(device.attributes[0].value == true){
+      pimaticApi.updateDevice(device.id, "turnOff");
+      device.attributes[0].value = false;
+    } else {
+      pimaticApi.updateDevice(device.id, "turnOn");
+      device.attributes[0].value = true;
+    }
   };
 
 });

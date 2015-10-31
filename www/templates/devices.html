@@ -1,11 +1,12 @@
-<ion-view view-title="device">
+<ion-view view-title="{{page}}">
   <ion-content>
     <ion-list>
-      <div ng-repeat="device in devices">
+      <div ng-repeat="device in data.devices">
         <!-- switch html        -->
-        <li class="item item-toggle" ng-if="device.template == 'switch'" ng-click="toggleSwitch(device)" style="pointer-events: all">
-          
+        <li class="item item-toggle" ng-show="device.template == 'switch'" ng-click="toggleSwitch(device)" style="pointer-events: all">
+
           {{device.name}}
+          <!--{{device.attributes[0].value}}-->
           <label class="toggle" >
             <input type="checkbox" ng-model="device.attributes[0].value">
             <div class="track">
@@ -14,6 +15,19 @@
           </label>
         </li>
 
+
+        <!-- other html        -->
+        <li class="item item-toggle" ng-show="device.template != 'switch'"  style="pointer-events: all">
+
+          {{device.name}}
+          {{device.attributes[0].value}}
+          <!--<label class="toggle" >-->
+            <!--<input type="checkbox" ng-model="device.attributes[0].value">-->
+            <!--<div class="track">-->
+              <!--<div class="handle"></div>-->
+            <!--</div>-->
+          <!--</label>-->
+        </li>
         <!--        end switch html-->
         <!--        {{device.name}} || {{device.template}} || -->
       </div>
